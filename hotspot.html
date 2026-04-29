@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>MbeejFepal - Portail Hotspot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <h1>MbeejFepal Hotspot</h1>
+            <p>Connectez-vous à internet haut débit</p>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Chargement des forfaits...</p>
+        </div>
+
+        <!-- Session active -->
+        <div id="sessionActive" class="session-card" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <h3>Vous êtes déjà connecté !</h3>
+            <p id="sessionInfo">Profitez de votre connexion internet</p>
+            <button onclick="window.location.href='http://neverssl.com'" class="btn btn-success">
+                <i class="fas fa-globe"></i> Commencer à naviguer
+            </button>
+        </div>
+
+        <!-- Forfaits -->
+        <div id="plansContainer" style="display: none;">
+            <h2 class="section-title"><i class="fas fa-tag"></i> Nos forfaits</h2>
+            <div id="plansList" class="plans-grid"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><i class="fas fa-headset"></i> Support: support@mbeejfepal.com</p>
+            <p><i class="fas fa-lock"></i> Paiement sécurisé</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

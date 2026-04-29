@@ -1,15 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset='utf-8'>
-<title>Redirection...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>MbeejFepal Hotspot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<script>
-var mac = '$(mac)';
-var ip = '$(ip)';
-var link = '$(link-login)';
-var url = 'https://mbeejfeppal.duckdns.org/hotspot/login?router_id=80&mac=' + encodeURIComponent(mac) + '&ip=' + encodeURIComponent(ip) + '&link_login=' + encodeURIComponent(link);
-window.location.href = url;
-</script>
-</body></html>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Redirection vers le portail...</p>
+    </div>
+
+    <script>
+        // Récupérer les paramètres de l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const routerId = urlParams.get('router_id');
+        const mac = urlParams.get('mac');
+        
+        // Stocker dans localStorage
+        if (routerId) localStorage.setItem('router_id', routerId);
+        if (mac) localStorage.setItem('mac', mac);
+        
+        // Rediriger vers le portail
+        window.location.href = '/hotspot.html';
+    </script>
+</body>
+</html>
