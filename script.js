@@ -5,7 +5,74 @@ const API_URL = 'http://localhost:8080';
 const routerId = localStorage.getItem('router_id');
 const mac = localStorage.getItem('mac');
 
-// Éléments DOM
+// Éléments DOMconst API_URL = 'http://localhost:8080';
+const routerId = localStorage.getItem('router_id');
+const mac = localStorage.getItem('mac');
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!routerId || !mac) {
+        document.getElementById('loading').innerHTML = '<p style="color: red;">Configuration manquante</p>';
+        return;
+    }
+    checkSession();
+    fetchProfiles();
+});
+
+async function checkSession() {
+    try {
+        const res = await fetch(`${API_URL}/api/sessions/status?router_id=${routerId}&mac=${mac}`);
+        const data = await res.json();
+        if (data.active) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('sessionActive').style.display = 'block';
+            document.getElementById('sessionInfo').innerText = `Session valable jusqu'au ${new Date(data.expires_at).toLocaleString()}`;
+            return true;
+        }
+        return false;
+    } catch { return false; }
+}
+
+async function fetchProfiles() {
+    try {
+        const res = await fetch(`${API_URL}/routers/${routerId}/profiles`);
+        const profiles = await res.json();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('plansContainer').style.display = 'block';
+        displayPlans(profiles);
+    } catch {
+        document.getElementById('loading').innerHTML = '<p>Erreur de chargement</p>';
+    }
+}
+
+function displayPlans(profiles) {
+    const container = document.getElementById('plansList');
+    container.innerHTML = profiles.map((p, i) => `
+        <div class="plan-card ${i === 1 ? 'popular' : ''}">
+            ${i === 1 ? '<div class="popular-badge">POPULAIRE</div>' : ''}
+            <div class="plan-icon"><i class="fas ${['fa-hourglass-half', 'fa-bolt', 'fa-gem'][i] || 'fa-wifi'}"></i></div>
+            <h3>${p.profile_name}</h3>
+            <div class="price">${p.price} <span class="currency">${p.currency || 'XOF'}</span></div>
+            <div class="duration"><i class="far fa-clock"></i> ${formatDuration(p.duration_minutes)}</div>
+            <ul class="features">
+                <li><i class="fas fa-check-circle"></i> Connexion haut débit</li>
+                <li><i class="fas fa-check-circle"></i> Support prioritaire</li>
+            </ul>
+            <button class="btn btn-primary" onclick="pay(${p.id})">
+                <i class="fas fa-credit-card"></i> Payer ${p.price} XOF
+            </button>
+        </div>
+    `).join('');
+}
+
+async function pay(profileId) {
+    window.location.href = `${API_URL}/api/payments/initiate-portal?router_id=${routerId}&profile_id=${profileId}&mac=${mac}`;
+}
+
+function formatDuration(minutes) {
+    if (minutes >= 1440) return `${Math.floor(minutes / 1440)}j`;
+    if (minutes >= 60) return `${Math.floor(minutes / 60)}h`;
+    return `${minutes}min`;
+}
 const loadingEl = document.getElementById('loading');
 const plansContainer = document.getElementById('plansContainer');
 const plansList = document.getElementById('plansList');
